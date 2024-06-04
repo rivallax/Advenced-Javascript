@@ -28,14 +28,20 @@
 
 //      *filter: Memfilter elemen dalam array berdasarkan kondisi yang ditentukan oleh fungsi dan mengembalikan array baru dengan elemen yang memenuhi kondisi tersebut.
 
+//contoh 1
 // const numbers = [1, 2, 3, 4, 5];
-
 // const evenNumbers = numbers.filter(function(num) {
 //     return num % 2 === 0;
 // });
 
 // console.log(evenNumbers); // Output: [2, 4]
 
+//contoh 2
+const angka = [-1, 3, 6, 8, 7, 3, 2, 4,8,-2]
+const newAngka = angka. filter (function (a){
+    return a >= 3;
+});
+console.log(newAngka);
 //       *reduce: Mengakumulasi nilai array menjadi satu nilai berdasarkan fungsi yang diberikan.
 
 // const numbers = [1, 2, 3, 4, 5];
