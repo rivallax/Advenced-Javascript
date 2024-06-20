@@ -70,6 +70,7 @@ searchButton.addEventListener('click', async function() {
         const inputKeyword = document.querySelector('.input-keyword');
         const movies = await getMovies(inputKeyword.value);
         updateUI(movies);
+        showNotification('Movies successfully loaded!');
         hideError();  // Hide error message if the request is successful
     } catch (err) {
         showError(err.message);
@@ -137,11 +138,28 @@ function showError(message) {
 
     const errorMessage = document.querySelector('#error-message');
     errorMessage.style.display = 'block';
+
+    hideNotification();
 }
 
 function hideError() {
     const errorMessage = document.querySelector('#error-message');
     errorMessage.style.display = 'none';
+}
+
+function showNotification(message) {
+    const notificationMessage = document.querySelector('#notification-message');
+    notificationMessage.textContent = message;
+    notificationMessage.style.display = 'block';
+
+    setTimeout(() => {
+        notificationMessage.style.display = 'none';
+    }, 3000); // Hide notification after 3 seconds
+}
+
+function hideNotification() {
+    const notificationMessage = document.querySelector('#notification-message');
+    notificationMessage.style.display = 'none';
 }
 
 function updateUI(movies) {
@@ -150,7 +168,6 @@ function updateUI(movies) {
     const movieContainer = document.querySelector('.movie-container');
     movieContainer.innerHTML = cards;
 }
-
 
 // showCards/ show movie detail
 function showCards(m) {
@@ -164,8 +181,12 @@ function showCards(m) {
                         <h5 class="card-title">${m.Title}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">${m.Year}</h6>
                         <a href="#" class="btn btn-primary modal-detail-button" data-bs-toggle="modal" data-bs-target="#MovieDetailModal" data-imdbid="${m.imdbID}">Show Details</a>
-                        <button class="btn ${likedClass} like-button" data-imdbid="${m.imdbID}">Like</button>
-                        <button class="btn ${favoritedClass} favorite-button" data-imdbid="${m.imdbID}">Favorite</button>
+                        <button class="btn ${likedClass} like-button" data-imdbid="${m.imdbID}">
+                            <i class="fas fa-heart"></i> Like
+                        </button>
+                        <button class="btn ${favoritedClass} favorite-button" data-imdbid="${m.imdbID}">
+                             <i class="fas fa-star"></i> Favorite
+                        </button>
                     </div>
                 </div>
             </div>`;
@@ -191,8 +212,6 @@ function showMovieDetail(m) {
                 </div>
             </div>`;
 }
-
-
 
 // fitur like and favorite (show)
 function toggleLike(imdbid) {
@@ -240,7 +259,12 @@ async function showFavoritedMovies() {
     updateUI(movies);
 }
 
-
+// 
+async function movieController(){
+    const favoritedMoviesArray = Array.from(favoritedMovies);
+    const movies = await Promise.all(favoritedMoviesArray.map(id => getMovieDetail(id)));
+    updateUI(movies);
+}
 
 
     
